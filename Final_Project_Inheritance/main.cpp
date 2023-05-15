@@ -1,0 +1,134 @@
+#include <iostream>
+#include <cmath>
+
+class Shape{
+
+public:
+    Shape(double dHeight, double dWidth);
+    virtual ~Shape();
+    virtual void scale(double dScaleFactor) = 0;
+    virtual double area() = 0;
+    virtual double perimeter() = 0;
+    virtual void displayProperties();
+
+protected:
+    double m_dHeight;
+    double m_dWidth;
+    std::string m_strType;
+
+};
+
+Shape::Shape(double dHeight, double dWidth) : m_dHeight(dHeight), m_dWidth(dWidth) {}
+
+Shape::~Shape() {
+    std::cout << "Shape Destructor called" << std::endl;
+}
+
+void Shape::displayProperties() {
+
+    std::cout << "Shape Type: " << m_strType << ", Height: " << m_dHeight << ", Width: " << m_dWidth << std::endl;
+
+}
+
+class Rectangle : public Shape {
+
+public:
+    Rectangle(double dHeight, double dWidth);
+    virtual ~Rectangle();
+    void scale(double dScaleFactor);
+    double area();
+    double perimeter();
+
+};
+
+Rectangle::Rectangle(double dHeight, double dWidth) : Shape(dHeight, dWidth){
+
+    this->m_strType = "Rectangle";
+
+}
+Rectangle::~Rectangle(){
+
+    std::cout << "Rectangle Destructor called" << std::endl;
+
+}
+void Rectangle::scale(double dScaleFactor){
+
+    this->m_dWidth = m_dWidth * dScaleFactor;
+    this->m_dHeight = m_dHeight * dScaleFactor;
+
+}
+double Rectangle::area(){
+
+    return (this->m_dHeight * this->m_dWidth);
+
+}
+double Rectangle::perimeter(){
+
+    return ((this->m_dHeight * 2) + (this->m_dWidth * 2));
+
+}
+
+class Circle : public Shape{
+
+public:
+    Circle(double dHeight, double dWidth);
+    virtual ~Circle();
+    void scale(double dScaleFactor);
+    double area();
+    double perimeter();
+
+};
+
+
+Circle::Circle(double dHeight, double dWidth) : Shape(dHeight, dWidth){
+
+    this->m_strType = "Circle";
+
+}
+Circle::~Circle(){
+
+    std::cout << "Circle Destructor called" << std::endl;
+
+}
+void Circle::scale(double dScaleFactor){
+
+    this->m_dWidth = m_dWidth * dScaleFactor;
+    this->m_dHeight = m_dHeight * dScaleFactor;
+
+}
+double Circle::area(){
+
+    return ((1.0/4.0) * M_PI * (pow(m_dHeight, 2)));
+
+}
+double Circle::perimeter(){
+
+    return (M_PI * m_dHeight);
+
+}
+
+int main() {
+    Rectangle* p_shapeRectangle = new Rectangle(2.0, 3.0);
+    Circle* p_shapeCircle = new Circle(2.0, 2.0);
+
+    Shape* p_shapes[2];
+
+    p_shapes[0] = p_shapeCircle;
+    p_shapes[1] = p_shapeRectangle;
+
+    for (int i = 0; i < 2; i++ ){
+
+        p_shapes[i]->displayProperties();
+        std::cout << "Area: " << p_shapes[i]->area() << ", Perimeter: " << p_shapes[i]->perimeter() << std::endl;
+        p_shapes[i]->scale(2.0);
+        p_shapes[i]->displayProperties();
+        std::cout << "Area: " << p_shapes[i]->area() << ", Perimeter: " << p_shapes[i]->perimeter() << std::endl;
+
+    }
+
+    for (int i = 0; i < 2; i++ ){
+        delete p_shapes[i];
+    }
+
+    return 0;
+}
